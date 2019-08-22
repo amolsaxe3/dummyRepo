@@ -77,7 +77,7 @@ xdescribe('The <Company /> Component', () => {
     });
     describe('when prop name is The FooBarBazz Company', ()=> {
       it('renders the name of the company in an div tag with an id of title', () => {
-        const wrapper = shallow(<Company name='The FooBarBazzCompany' />);
+        const wrapper = shallow(<Company name='The FooBarBazz Company' />);
         const companyDiv = wrapper.find('div#company');
 
         expect(companyDiv).to.have.length(1, 'Expected to find company name div');
