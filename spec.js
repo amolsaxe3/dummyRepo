@@ -379,7 +379,7 @@ xdescribe('<IceCreamForm />', ()=> {
     scoopOneInput.simulate('change', { target: { name: 'scoopOne', value: 'strawberry'} });
     expect(wrapper.state().scoopOne).to.equal('strawberry');
 
-    scoopOneInput.simulate('change', { target: { name: 'scoopTwo', value: 'coffee'} });
+    scoopTwoInput.simulate('change', { target: { name: 'scoopTwo', value: 'coffee'} });
     expect(wrapper.state().scoopTwo).to.equal('coffee');
   });
 });
