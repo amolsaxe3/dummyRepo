@@ -9,7 +9,7 @@ import { JSDOM } from 'jsdom';
 
 const dom = new JSDOM('<!doctype html><html><body></body></html>', {
   includeNodeLocations: true,
-  runScripts: 'dangerously'
+  runScripts: 'dangerously',
 });
 const { window } = dom;
 
@@ -18,10 +18,10 @@ global.document = window.document;
 global.navigator = {
   userAgent: 'node.js',
 };
-global.requestAnimationFrame = function (callback) {
+global.requestAnimationFrame = function(callback) {
   return setTimeout(callback, 0);
 };
-global.cancelAnimationFrame = function (id) {
+global.cancelAnimationFrame = function(id) {
   clearTimeout(id);
 };
 
@@ -42,7 +42,14 @@ import sinon from 'sinon';
 
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Switch, Redirect, Route, MemoryRouter, Link, NavLink } from 'react-router-dom';
+import {
+  Switch,
+  Redirect,
+  Route,
+  MemoryRouter,
+  Link,
+  NavLink,
+} from 'react-router-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
 chai.use(chaiAsPromised);
@@ -62,69 +69,72 @@ import { mount, shallow } from 'enzyme';
 /* PART ONE: The Company Component */
 /**************************/
 
-const Company = ()=> {
+const Company = () => {
   return null;
 };
 
-
 xdescribe('The <Company /> Component', () => {
-  describe('Rendering', ()=> {
-    describe('when prop name is The Acme Company', ()=> {
-      it('renders the name of the company in an div tag with an id of title', () => {
-        const wrapper = shallow(<Company name='The Acme Company' />);
+  describe('Rendering', () => {
+    describe('when prop name is The Acme Company', () => {
+      it('renders the name of the company in an div tag with an id of company', () => {
+        const wrapper = shallow(<Company name="The Acme Company" />);
         const companyDiv = wrapper.find('div#company');
 
-        expect(companyDiv).to.have.length(1, 'Expected to find company name div');
+        expect(companyDiv).to.have.length(
+          1,
+          'Expected to find company name div',
+        );
         expect(companyDiv.text()).to.equal('The Acme Company');
       });
     });
-    describe('when prop name is The FooBarBazz Company', ()=> {
+    describe('when prop name is The FooBarBazz Company', () => {
       it('renders the name of the company in an div tag with an id of title', () => {
-        const wrapper = shallow(<Company name='The FooBarBazz Company' />);
+        const wrapper = shallow(<Company name="The FooBarBazz Company" />);
         const companyDiv = wrapper.find('div#company');
 
-        expect(companyDiv).to.have.length(1, 'Expected to find company name div');
+        expect(companyDiv).to.have.length(
+          1,
+          'Expected to find company name div',
+        );
         expect(companyDiv.text()).to.equal('The FooBarBazz Company');
       });
     });
   });
 });
 
-
 /**************************/
 /* PART TWO: The  Notice Component */
 /**************************/
 
-const Notice = ()=> {
+const Notice = () => {
   return null;
 };
 
-
 xdescribe('<Notice />', () => {
-  describe('Rendering the text props', ()=> {
+  describe('Rendering the text props', () => {
     it('renders text in a div in all caps', () => {
-      let wrapper = shallow(<Notice text='Look Out' />);
+      let wrapper = shallow(<Notice text="Look Out" />);
       let div = wrapper.find('div');
 
       expect(div).to.have.length(1, 'Expected to find one div element');
       expect(div.text()).to.equal('LOOK OUT');
 
-      wrapper = shallow(<Notice text='Watch It' />);
+      wrapper = shallow(<Notice text="Watch It" />);
       div = wrapper.find('div');
 
       expect(div).to.have.length(1, 'Expected to find one div element');
       expect(div.text()).to.equal('WATCH IT');
     });
   });
-  describe('When critical props is set to true', ()=> {
+  describe('When critical props is set to true', () => {
     it('sets the class name to red', () => {
-      let wrapper = shallow(<Notice text='Look Out' critical={ true }/>);
+      let wrapper = shallow(<Notice text="Look Out" critical={true} />);
       let div = wrapper.find('div.red');
 
       expect(div).to.have.length(1, 'Expected to find one div element');
       expect(div.text()).to.equal('LOOK OUT');
 
-      wrapper = shallow(<Notice text='Watch It' />);
+      wrapper = shallow(<Notice text="Watch It" />);
       div = wrapper.find('div.red');
 
       expect(div).to.have.length(0, 'Expected not to find div with class red');
@@ -132,31 +142,42 @@ xdescribe('<Notice />', () => {
   });
 });
 
-
 /**************************/
 /* PART THREE: The Preview Component */
 /**************************/
-class Preview extends React.Component{
-  render(){
+class Preview extends React.Component {
+  render() {
     return null;
   }
 }
 
 xdescribe('<Preview />', () => {
-  describe('state', ()=> {
-    it('sets state with passed in props', () => {
-      let wrapper = shallow(<Preview content='Hello World' charCount={ 2 } isPreview={ true }/>);
-      expect(wrapper.state()).to.eql({ content: 'Hello World', charCount: 2, isPreview: true}, 'expected state to contain passed in props');
+  describe('state', () => {
+    it('sets state with passed in props and renders component correctly', () => {
+      let wrapper = shallow(
+        <Preview content="Hello World" charCount={2} isPreview={true} />,
+      );
+      expect(wrapper.state()).to.eql(
+        { content: 'Hello World', charCount: 2, isPreview: true },
+        'expected state to contain passed in props',
+      );
       expect(wrapper.find('p').text()).to.equal('He');
 
-      wrapper = shallow(<Preview content='Hello World!!!!' charCount={ 3 } isPreview = { false }/>);
-      expect(wrapper.state()).to.eql({ content: 'Hello World!!!!', charCount: 3, isPreview: false}, 'expected state to contain passed in props');
+      wrapper = shallow(
+        <Preview content="Hello World!!!!" charCount={3} isPreview={false} />,
+      );
+      expect(wrapper.state()).to.eql(
+        { content: 'Hello World!!!!', charCount: 3, isPreview: false },
+        'expected state to contain passed in props',
+      );
     });
   });
 
-  describe('interaction', ()=> {
+  describe('interaction', () => {
     it('clicking the p sets toggles isPreview', () => {
-      const wrapper = shallow(<Preview content='Hello World' charCount={ 2 } isPreview={ true }/>);
+      const wrapper = shallow(
+        <Preview content="Hello World" charCount={2} isPreview={true} />,
+      );
 
       wrapper.find('p').simulate('click');
       expect(wrapper.state().isPreview).to.equal(false);
@@ -169,30 +190,27 @@ xdescribe('<Preview />', () => {
   });
 });
 
-
 /**************************/
 /* PART FOUR: The Things Component */
 /**************************/
 
-const  Things = ({ things })=> {
-  return (
-    null
-  );
+const Things = ({ things }) => {
+  return null;
 };
 
-xdescribe('The Things List', ()=> {
-  describe('With three things', ()=> {
-    it('displays the three things names in an unordered list', ()=> {
+xdescribe('The Things List', () => {
+  describe('With three things', () => {
+    it('displays the three things names in an unordered list', () => {
       const things = [
         { id: 1, name: 'FOO' },
         { id: 2, name: 'BAR' },
         { id: 3, name: 'BAZZ' },
       ];
-      const wrapper = shallow(<Things things={ things } />);
+      const wrapper = shallow(<Things things={things} />);
       const ul = wrapper.find('ul');
       expect(ul).to.have.length(1, 'Expected to find UL');
       const lis = wrapper.find('li');
-      expect(lis).to.have.length(3, 'Expected to 3 LI\'s');
+      expect(lis).to.have.length(3, "Expected to 3 LI's");
 
       expect(lis.first().text()).to.equal('FOO');
       expect(lis.last().text()).to.equal('BAZZ');
@@ -201,13 +219,13 @@ xdescribe('The Things List', ()=> {
       expect(lis.last().key()).to.equal('3');
     });
 
-    it('special thing gets a special class', ()=> {
+    it('special thing gets a special class', () => {
       const things = [
         { id: 1, name: 'FOO' },
         { id: 2, name: 'BAR', special: true },
         { id: 3, name: 'BAZZ' },
       ];
-      const wrapper = shallow(<Things things={ things } />);
+      const wrapper = shallow(<Things things={things} />);
       const special = wrapper.find('li.special');
       expect(special.length).to.equal(1);
       expect(special.text()).to.equal('BAR');
@@ -219,25 +237,25 @@ xdescribe('The Things List', ()=> {
 /* PART FIVE: The StatefulThings Component */
 /**************************/
 
-class StatefulThings extends React.Component{
-  render(){
+class StatefulThings extends React.Component {
+  render() {
     return null;
   }
 }
 
-xdescribe('StatefulList', ()=> {
-  describe('With three items', ()=> {
-    it('displays the three things names in an unordered list', ()=> {
+xdescribe('StatefulList', () => {
+  describe('With three items', () => {
+    it('displays the three things names in an unordered list', () => {
       const things = [
         { id: 1, name: 'FOO' },
         { id: 2, name: 'BAR' },
         { id: 3, name: 'BAZZ' },
       ];
-      const wrapper = shallow(<StatefulThings things={ things } />);
+      const wrapper = shallow(<StatefulThings things={things} />);
       const ul = wrapper.find('ul');
       expect(ul).to.have.length(1, 'Expected to find UL');
       const lis = wrapper.find('li');
-      expect(lis).to.have.length(3, 'Expected to 3 LI\'s');
+      expect(lis).to.have.length(3, "Expected to 3 LI's");
 
       expect(lis.first().text()).to.equal('FOO');
       expect(lis.last().text()).to.equal('BAZZ');
@@ -246,26 +264,31 @@ xdescribe('StatefulList', ()=> {
       expect(lis.last().key()).to.equal('3');
     });
   });
-  describe('Interaction', ()=> {
-    it('clicking on thing toggles its special property', ()=> {
+  describe('Interaction', () => {
+    it('clicking on thing toggles its special property', () => {
       const things = [
         { id: 1, name: 'FOO' },
         { id: 2, name: 'BAR' },
         { id: 3, name: 'BAZZ' },
       ];
-      const wrapper = shallow(<StatefulThings things={ things } />);
+      const wrapper = shallow(<StatefulThings things={things} />);
       const ul = wrapper.find('ul');
       let lis = wrapper.find('li.special');
       expect(lis.length).to.equal(0);
 
-      wrapper.find('li').last().simulate('click');
+      wrapper
+        .find('li')
+        .last()
+        .simulate('click');
       expect(wrapper.state().things[2].special).to.equal(true);
       lis = wrapper.find('li.special');
       expect(lis.length).to.equal(1);
 
-      wrapper.find('li').last().simulate('click');
+      wrapper
+        .find('li')
+        .last()
+        .simulate('click');
       expect(wrapper.state().things[2].special).to.equal(false);
-
     });
   });
 });
@@ -274,37 +297,39 @@ xdescribe('StatefulList', ()=> {
 /* PART SIX: Acme Routes */
 /**************************/
 
+const Places = () => <div>Places</div>;
+const Place = () => <div>Place</div>;
+const Home = () => <div>Home</div>;
+const NotFound = () => <div>NotFound</div>;
 
-const Places = ()=> <div>Places</div>;
-const Place = ()=> <div>Place</div>;
-const Home = ()=> <div>Home</div>;
-const NotFound = ()=> <div>NotFound</div>;
-
-const Routes = ()=> {
-  return (
-    null
-  );
+const Routes = () => {
+  return null;
 };
-
 
 xdescribe('<Routes> component', () => {
   it('renders Home with / path', () => {
     const mounted = mount(
       <MemoryRouter initialEntries={['/']}>
         <Routes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    expect(mounted.find(Home)).to.have.length(1, 'Expected Home to be rendered');
+    expect(mounted.find(Home)).to.have.length(
+      1,
+      'Expected Home to be rendered',
+    );
   });
   it('renders Places with /places path', () => {
     const mounted = mount(
       <MemoryRouter initialEntries={['/places']}>
         <Routes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    expect(mounted.find(Places)).to.have.length(1, 'Expected Places to be rendered');
+    expect(mounted.find(Places)).to.have.length(
+      1,
+      'Expected Places to be rendered',
+    );
     expect(mounted.find(Home)).to.have.length(0, 'should not be rendered');
     expect(mounted.find(NotFound)).to.have.length(0, 'should not be rendered');
     expect(mounted.find(Place)).to.have.length(0, 'should not be rendered');
@@ -314,7 +339,7 @@ xdescribe('<Routes> component', () => {
     const mounted = mount(
       <MemoryRouter initialEntries={['/places/1234']}>
         <Routes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(mounted.find(Place)).to.have.length(1, 'Place should be rendered');
     expect(mounted.find(Places)).to.have.length(0, 'should not to be rendered');
@@ -328,10 +353,13 @@ xdescribe('<Routes> component', () => {
     const mounted = mount(
       <MemoryRouter initialEntries={['/nothingToSeeHere']}>
         <Routes />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    expect(mounted.find(NotFound)).to.have.length(1, 'Expected NotFound to be rendered');
+    expect(mounted.find(NotFound)).to.have.length(
+      1,
+      'Expected NotFound to be rendered',
+    );
     expect(mounted.find(Home)).to.have.length(0, 'should not be rendered');
     expect(mounted.find(Place)).to.have.length(0, 'should not be rendered');
     expect(mounted.find(Places)).to.have.length(0, 'should not be rendered');
@@ -343,28 +371,43 @@ xdescribe('<Routes> component', () => {
 /* PART SEVEN: Ice Cream Form */
 /**************************/
 
-class IceCreamForm extends React.Component{
-  render(){
+class IceCreamForm extends React.Component {
+  render() {
     return null;
   }
 }
 
-xdescribe('<IceCreamForm />', ()=> {
-  it('has state for scoopOne and scoopTwo', ()=> {
-    const wrapper = shallow(<IceCreamForm scoopOne='vanilla' scoopTwo='chocolate' />);
-    expect(wrapper.state()).to.eql({ scoopOne: 'vanilla', scoopTwo: 'chocolate' });
+xdescribe('<IceCreamForm />', () => {
+  it('has state for scoopOne and scoopTwo', () => {
+    const wrapper = shallow(
+      <IceCreamForm scoopOne="vanilla" scoopTwo="chocolate" />,
+    );
+    expect(wrapper.state()).to.eql({
+      scoopOne: 'vanilla',
+      scoopTwo: 'chocolate',
+    });
   });
 
-  it('has 2 input fields', ()=> {
-    const wrapper = shallow(<IceCreamForm scoopOne='vanilla' scoopTwo='chocolate' />);
+  it('has 2 input fields', () => {
+    const wrapper = shallow(
+      <IceCreamForm scoopOne="vanilla" scoopTwo="chocolate" />,
+    );
     const scoopOneInput = wrapper.find('input[name="scoopOne"]');
     const scoopTwoInput = wrapper.find('input[name="scoopTwo"]');
-    expect(scoopOneInput.length).to.equal(1, 'could not find input for scoopOne');
-    expect(scoopTwoInput.length).to.equal(1, 'could not find input for scoopTwo');
+    expect(scoopOneInput.length).to.equal(
+      1,
+      'could not find input for scoopOne',
+    );
+    expect(scoopTwoInput.length).to.equal(
+      1,
+      'could not find input for scoopTwo',
+    );
   });
 
-  it('input fields have value props from state', ()=> {
-    const wrapper = shallow(<IceCreamForm scoopOne='vanilla' scoopTwo='chocolate' />);
+  it('input fields have value props from state', () => {
+    const wrapper = shallow(
+      <IceCreamForm scoopOne="vanilla" scoopTwo="chocolate" />,
+    );
     const scoopOneInput = wrapper.find('input[name="scoopOne"]');
     const scoopTwoInput = wrapper.find('input[name="scoopTwo"]');
 
@@ -372,38 +415,39 @@ xdescribe('<IceCreamForm />', ()=> {
     expect(scoopTwoInput.props().value).to.equal('chocolate');
   });
 
-  it('changing input changes the state', ()=> {
-    const wrapper = shallow(<IceCreamForm scoopOne='vanilla' scoopTwo='chocolate' />);
+  it('changing input changes the state', () => {
+    const wrapper = shallow(
+      <IceCreamForm scoopOne="vanilla" scoopTwo="chocolate" />,
+    );
     const scoopOneInput = wrapper.find('input[name="scoopOne"]');
     const scoopTwoInput = wrapper.find('input[name="scoopTwo"]');
 
     expect(scoopOneInput.props().value).to.equal('vanilla');
     expect(scoopTwoInput.props().value).to.equal('chocolate');
-    scoopOneInput.simulate('change', { target: { name: 'scoopOne', value: 'strawberry'} });
+    scoopOneInput.simulate('change', {
+      target: { name: 'scoopOne', value: 'strawberry' },
+    });
     expect(wrapper.state().scoopOne).to.equal('strawberry');
 
-    scoopTwoInput.simulate('change', { target: { name: 'scoopTwo', value: 'coffee'} });
+    scoopTwoInput.simulate('change', {
+      target: { name: 'scoopTwo', value: 'coffee' },
+    });
     expect(wrapper.state().scoopTwo).to.equal('coffee');
   });
 });
-
 
 /**************************/
 /* PART EIGHT: DOM */
 /**************************/
 
+const findSpecialIceCream = () => {};
 
-const findSpecialIceCream = ()=> {
-};
+const listAllFlavors = () => {};
 
-const listAllFlavors = ()=> {
-};
+const changeFlavorByIndex = () => {};
 
-const changeFlavorByIndex = ()=> {
-};
-
-xdescribe('dom selectors', ()=> {
-  beforeEach(()=> {
+xdescribe('dom selectors', () => {
+  beforeEach(() => {
     document.body.innerHTML = `
       <div>
         <h1>Acme Ice Cream</h1>
@@ -413,20 +457,20 @@ xdescribe('dom selectors', ()=> {
       </div>
     `;
   });
-  describe('findSpecialIceCream', ()=> {
-    it('return coffee', ()=> {
+  describe('findSpecialIceCream', () => {
+    it('returns coffee', () => {
       expect(findSpecialIceCream()).to.equal('Coffee');
     });
   });
 
-  describe('listIceCreamFlavors', ()=> {
-    it('returns ice cream flavors', ()=> {
+  describe('listIceCreamFlavors', () => {
+    it('returns ice cream flavors', () => {
       expect(listAllFlavors()).to.eql(['Vanilla', 'Chocolate', 'Coffee']);
     });
   });
 
-  describe('changeFlavorByIndex', ()=> {
-    it('modifies the flavor based on its index', ()=> {
+  describe('changeFlavorByIndex', () => {
+    it('modifies the flavor based on its index', () => {
       changeFlavorByIndex(1, 'Rocky Road');
       expect(listAllFlavors()).to.eql(['Vanilla', 'Rocky Road', 'Coffee']);
     });
@@ -437,17 +481,11 @@ xdescribe('dom selectors', ()=> {
 /* PART NINE: Vanilla JS */
 /**************************/
 
-const basicIteration = () => {
+const basicIteration = () => {};
 
-};
+const mapIteration = () => {};
 
-const mapIteration = () => {
-
-};
-
-const reduceIteration = () => {
-
-};
+const reduceIteration = () => {};
 
 xdescribe('Understanding of Iteration', () => {
   let list;
@@ -466,8 +504,10 @@ xdescribe('Understanding of Iteration', () => {
       // Dont use forEach!
       expect(forEachSpy).not.to.have.been.called();
 
-      for (let i  = 0; i < list.length; ++i) {
-        expect(mySpy).on.nth(i + 1).to.be.called.with(list[i]);
+      for (let i = 0; i < list.length; ++i) {
+        expect(mySpy)
+          .on.nth(i + 1)
+          .to.be.called.with(list[i]);
       }
     });
   });
@@ -482,10 +522,10 @@ xdescribe('Understanding of Iteration', () => {
         // Dont use map!
         expect(mapSpy).not.to.have.been.called();
 
-        for (let i  = 0; i < list.length; ++i) {
-          expect(newList[i]).to.eql(list[i] * multiplier)
+        for (let i = 0; i < list.length; ++i) {
+          expect(newList[i]).to.eql(list[i] * multiplier);
         }
-      })
+      });
     });
 
     describe('Reduce', () => {
@@ -497,16 +537,16 @@ xdescribe('Understanding of Iteration', () => {
             return {
               ...dict,
               [next]: true,
-            }
+            };
           },
-          {}
+          {},
         );
 
         // Dont use reduce!
         expect(reduceSpy).not.to.have.been.called();
 
-        for (let i  = 0; i < list.length; ++i) {
-          expect(reducedDict[list[i]]).to.eql(true)
+        for (let i = 0; i < list.length; ++i) {
+          expect(reducedDict[list[i]]).to.eql(true);
         }
       });
     });
@@ -604,7 +644,7 @@ xdescribe('Promises', () => {
 
       let timedPromResolved = false;
 
-      timedProm.then((v) => {
+      timedProm.then(v => {
         timedPromResolved = true;
         expect(v).to.eql(retVal);
       });
@@ -618,5 +658,5 @@ xdescribe('Promises', () => {
     });
 
     clock.restore();
-  })
+  });
 });
