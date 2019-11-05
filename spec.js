@@ -37,17 +37,20 @@ copyProps(window, global);
 import chai from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import spies from 'chai-spies';
+import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
 
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Switch, Redirect, Route, MemoryRouter, Link, NavLink } from 'react-router-dom';
 
 Enzyme.configure({ adapter: new Adapter() });
+chai.use(chaiAsPromised);
 chai.use(chaiEnzyme());
 chai.use(spies);
 
 import React from 'react';
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 /* START HERE */
@@ -428,4 +431,192 @@ xdescribe('dom selectors', ()=> {
       expect(listAllFlavors()).to.eql(['Vanilla', 'Rocky Road', 'Coffee']);
     });
   });
+});
+
+/**************************/
+/* PART NINE: Vanilla JS */
+/**************************/
+
+const basicIteration = () => {
+
+};
+
+const mapIteration = () => {
+
+};
+
+const reduceIteration = () => {
+
+};
+
+xdescribe('Understanding of Iteration', () => {
+  let list;
+  beforeEach(() => {
+    list = new Array(Math.ceil(Math.random() * 10) + 5)
+      .fill('')
+      .map(e => Math.floor(Math.random() * 1000));
+  });
+
+  describe('Basic', () => {
+    it('Can iterate over a list and call a callback on each element', () => {
+      const mySpy = chai.spy();
+      const forEachSpy = chai.spy.on(list, 'forEach');
+      basicIteration(list, mySpy);
+
+      // Dont use forEach!
+      expect(forEachSpy).not.to.have.been.called();
+
+      for (let i  = 0; i < list.length; ++i) {
+        expect(mySpy).on.nth(i + 1).to.be.called.with(list[i]);
+      }
+    });
+  });
+
+  describe('Functional', () => {
+    describe('Map', () => {
+      it('Can map over a list creating a new list using a callback', () => {
+        const mapSpy = chai.spy.on(list, 'map');
+        const multiplier = Math.ceil(Math.random() * 30);
+        const newList = mapIteration(list, e => e * multiplier);
+
+        // Dont use map!
+        expect(mapSpy).not.to.have.been.called();
+
+        for (let i  = 0; i < list.length; ++i) {
+          expect(newList[i]).to.eql(list[i] * multiplier)
+        }
+      })
+    });
+
+    describe('Reduce', () => {
+      it('Can reduce a list', () => {
+        const reduceSpy = chai.spy.on(list, 'reduce');
+        const reducedDict = reduceIteration(
+          list,
+          (dict, next) => {
+            return {
+              ...dict,
+              [next]: true,
+            }
+          },
+          {}
+        );
+
+        // Dont use reduce!
+        expect(reduceSpy).not.to.have.been.called();
+
+        for (let i  = 0; i < list.length; ++i) {
+          expect(reducedDict[list[i]]).to.eql(true)
+        }
+      });
+    });
+  });
+});
+
+const recursiveAdder = () => {};
+
+xdescribe('Recursion', () => {
+  let recursiveStructure;
+  let total = 0;
+  beforeEach(() => {
+    total = 0;
+
+    const depth = Math.ceil(Math.random() * 10) + 10;
+    const widthMin = Math.ceil(Math.random() * 5) + 3;
+    const widthVariant = 3;
+    const chanceToDive = 25;
+
+    const genNextLevel = (curDepth = 0) => {
+      if (curDepth >= depth) return 0;
+      const nextStructure = {};
+
+      const widVar = Math.floor(Math.random() * widthVariant);
+
+      for (let i = 0; i < widthMin + widVar; ++i) {
+        const curDivChance = Math.random() * 100;
+
+        if (curDivChance < chanceToDive) {
+          nextStructure[i] = genNextLevel(curDepth + 1);
+        } else {
+          const nextVal = Math.ceil(Math.random() * 1000);
+          total += nextVal;
+          nextStructure[i] = nextVal;
+        }
+      }
+
+      return nextStructure;
+    };
+
+    recursiveStructure = genNextLevel();
+  });
+
+  describe('Recursive Adder', () => {
+    it('Can dive through the object structure adding all the number values together', () => {
+      expect(recursiveAdder(recursiveStructure)).to.eql(total);
+    });
+  });
+});
+
+const uncertainFunc = () => {};
+
+xdescribe('Promises', () => {
+  describe('Uncertain', () => {
+    it('Returns a resolved value if given true for whether it should resolve', () => {
+      const retVal = 'Winston the Aussie';
+      const prom = uncertainFunc(true, retVal);
+
+      expect(prom instanceof Promise).to.eql(true);
+
+      return prom
+        .then(v => {
+          expect(v).to.eql(retVal);
+        })
+        .catch(() => {
+          // Should not fail!
+          assert.fail('This promise should not fail!');
+        });
+    });
+
+    it('Returns a rejected value if given false for whether it should resolve', () => {
+      const retVal = 'Winston the Aussie';
+      const prom = uncertainFunc(false, retVal);
+
+      expect(prom instanceof Promise).to.eql(true);
+
+      return prom
+        .then(() => {
+          // Should not succeed!
+          assert.fail('This promise should not fail!');
+        })
+        .catch(v => {
+          expect(v).to.eql(retVal);
+        });
+    });
+
+    const clock = sinon.useFakeTimers();
+
+    it('Delays resolution if given a delay as a third argument', () => {
+      const retVal = 'Winston the Aussie';
+      const timedProm = uncertainFunc(true, retVal, 500);
+      const lessTimedProm = uncertainFunc(true, retVal, 100);
+
+      expect(timedProm instanceof Promise).to.eql(true);
+
+      let timedPromResolved = false;
+
+      timedProm.then((v) => {
+        timedPromResolved = true;
+        expect(v).to.eql(retVal);
+      });
+
+      lessTimedProm.then(() => {
+        expect(timedPromResolved).to.eql(false);
+      });
+
+      clock.tick(110);
+      clock.tick(400);
+    });
+
+    clock.restore();
+  })
 });
