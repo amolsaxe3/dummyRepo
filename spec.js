@@ -635,7 +635,7 @@ xdescribe('Promises', () => {
 
     const clock = sinon.useFakeTimers();
 
-    it('Delays resolution if given a delay as a third argument', () => {
+    it('Delays resolution if given a delay as a third argument', done => {
       const retVal = 'Winston the Aussie';
       const timedProm = uncertainFunc(true, retVal, 500);
       const lessTimedProm = uncertainFunc(true, retVal, 100);
@@ -643,17 +643,29 @@ xdescribe('Promises', () => {
       expect(timedProm instanceof Promise).to.eql(true);
 
       let timedPromResolved = false;
+      let isCorrectOrder = false;
 
-      timedProm.then(v => {
-        timedPromResolved = true;
-        expect(v).to.eql(retVal);
-      });
+      timedProm
+        .then(v => {
+          timedPromResolved = true;
+          expect(v).to.eql(retVal);
+          expect(isCorrectOrder).to.eql(true);
+        })
+        .finally(() => {
+          if (isCorrectOrder) {
+            done();
+          }
+        });
 
-      lessTimedProm.then(() => {
-        expect(timedPromResolved).to.eql(false);
-      });
+      lessTimedProm
+        .then(() => {
+          expect(timedPromResolved).to.eql(false);
+          isCorrectOrder = true;
+        })
+        .catch(done);
 
       clock.tick(110);
+
       clock.tick(400);
     });
 
