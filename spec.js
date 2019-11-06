@@ -644,6 +644,7 @@ xdescribe('Promises', () => {
 
       let timedPromResolved = false;
       let isCorrectOrder = false;
+      let errorCaught = false;
 
       timedProm
         .then(v => {
@@ -651,8 +652,12 @@ xdescribe('Promises', () => {
           expect(v).to.eql(retVal);
           expect(isCorrectOrder).to.eql(true);
         })
+        .catch(e => {
+          errorCaught = true;
+          done(e);
+        })
         .finally(() => {
-          if (isCorrectOrder) {
+          if (isCorrectOrder && !errorCaught) {
             done();
           }
         });
