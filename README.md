@@ -13,4 +13,5 @@ To this end — and perhaps it goes without saying — we ask that you don't hel
 1. **Fork** this repo to your own github
 * Clone your fork to your local machine.
 * `npm install`
+* Do your work in `spec.js`, changing `xdescribe` to `describe` as you advance through the tests
 * `npm run spec`
